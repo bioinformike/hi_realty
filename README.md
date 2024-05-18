@@ -11,14 +11,14 @@ This should be a webpage with an interactive map allowing the user to zoom and p
 
 # Progress
 - [ ] Scraper code
- - [ ]  Scrape and process data from hicentral.com
- - [ ]  Add step to get latitude and longitude from address for future mapping
- - [ ]  Convert final working notebook to a python script that can be run standalone with logging
+  - [ ]  Scrape and process data from hicentral.com
+  - [ ]  Add step to get latitude and longitude from address for future mapping
+  - [ ]  Convert final working notebook to a python script that can be run standalone with logging
 
 - [ ] Map web page
- - [ ] Generate placeholder page
- - [ ] Add sidebar for filters
- - [ ] Make rest of page map view centered on Hawaii
- - [ ] Load in latest scraping results form local file
- - [ ] Add markers to map for properties
- - [ ] Group markers if necessary
+  - [ ] Generate placeholder page
+  - [ ] Add sidebar for filters
+  - [ ] Make rest of page map view centered on Hawaii
+  - [ ] Load in latest scraping results form local file
+  - [ ] Add markers to map for properties
+  - [ ] Group markers if necessary
