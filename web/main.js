@@ -6,7 +6,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 	maxZoom: 20}).addTo(map);
 
 // Parse TSV and add markers
-Papa.parse('./assets/latest_prop_data.tsv', {
+Papa.parse('./assets/latest_home_data.tsv', {
     download: true,
     header: true,
     complete: function(results) {
