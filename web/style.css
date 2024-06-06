@@ -67,3 +67,51 @@ html, body, #map {
     z-index: 999;
   }
   
+  .slider-container {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    max-width: 600px;
+}
+
+.slider {
+    position: relative;
+    width: 100%;
+    margin: 0 10px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #ddd;
+    outline: none;
+    position: absolute;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    margin: 0 10px;
+    font-size: 16px;
+    text-align: center;
+}

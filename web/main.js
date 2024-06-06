@@ -5,6 +5,10 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 	subdomains: 'abcd',
 	maxZoom: 20}).addTo(map);
 
+  map.zoomControl.setPosition('bottomright');
+
+
+
 // Parse TSV and add markers
 Papa.parse('./assets/latest_home_data.tsv', {
     download: true,
