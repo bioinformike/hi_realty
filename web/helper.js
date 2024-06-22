@@ -1,36 +1,39 @@
 // Function to fetch and read the TSV file content
-export async function fetchTSV(path) {
-    const response = await fetch(path);
-    const tsv = await response.text();
-    return tsv;
-}
 
-// Function to parse TSV content
-export function parseTSV(tsv) {
-    // Split the TSV content by new lines to get rows
-    const rows = tsv.trim().split('\n');
-
-    // Split the first row by tab to get column headers
-    const headers = rows[0].split('\t');
-
-    // Initialize the DataFrame-like object
-    const dataFrame = {};
-
-    // Initialize each column as an empty array
-    headers.forEach(header => {
-        dataFrame[header] = [];
+export function loadHomeData(callback) {
+    Papa.parse('./assets/latest_home_data.tsv', {
+      download: true,
+      header: true,
+      complete: function(results) {
+        callback(results.data);
+        console.log("Finished processing data in loadHomeData function");
+      }
     });
+  }
 
-    // Loop through each row (skipping the header row)
-    for (let i = 1; i < rows.length; i++) {
-        const row = rows[i].split('\t');
-        headers.forEach((header, index) => {
-            dataFrame[header].push(row[index]);
-        });
+
+
+export function parseData(data) {
+    let min_price = 0;
+    let max_price = 0;
+    data.forEach(property => {
+        const lat = parseFloat(property.lat);
+        const lon = parseFloat(property.long);
+        const address = property.clean_full_add;
+        const price = property.curr_price;
+        const bedrooms = property.bedrooms;
+        const fullBaths = property.full_baths;
+        const halfBaths = property.half_baths;
+        const parking = property.parking;
+        const imgUrls = property.img_urls.split(',').map(url => url.trim()); // Trim any whitespace
+
+        if (price < min_price) {
+        min_price = price;
+        } else if (price > max_price) {
+        max_price = price;
     }
-
-    return dataFrame;
 }
+
 
 
 // Function to calculate minimum and maximum for a column
