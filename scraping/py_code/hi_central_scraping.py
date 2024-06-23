@@ -10,29 +10,30 @@ from geopy.geocoders import GoogleV3
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
 # Misc libraries
+import os
 import re
 import tqdm
 import pandas as pd
 from datetime import datetime
 import shutil
 
-
 # Do we want debug messages to print or not
-DEBUG = True
+DEBUG = False
 
+# Setup some constants
+# Directory of Project
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
+# Get our .env file from out locker
+env_path = os.path.join(PROJECT_DIR, 'scraping' , 'locker', '.env')
+env_path = os.path.abspath(env_path)
 
 # Read in our Google Maps API key
-#with open('locker\.env') as env_file:
-with open('../locker/.env', 'r') as env_file:
+with open(env_path, 'r') as env_file:
     lines = env_file.readlines()
     raw_api = lines[0]
 
 GMAP_API_KEY = raw_api.split('=')[1].replace("'", "").strip()
-
-
-# Setup some constants
-# Output directory
-OUT_DIR = '../results'
 
 # All results URL
 BASE_URL = 'https://propertysearch.hicentral.com'
@@ -151,7 +152,6 @@ def get_coords(input_address, input_api_key):
     print(f"Error: {e}")
     return None
   
-
 # Function to generate a URL given some particular parameters (only used when more results)
 # than can be loaded in the X max pages it allows you to load
 def gen_url(page_num = '', option_id = '', min_dollar = '', max_dollar = ''):
@@ -303,6 +303,16 @@ def main():
   # Get datetime
   curr_dt = get_dt()
 
+  # Output directory
+  OUT_DIR = os.path.join(PROJECT_DIR, 'scraping', 'results')
+  OUT_DIR = os.path.abspath(OUT_DIR)
+
+
+  RAW_FN   = f'{OUT_DIR}/hi_central_data_{curr_dt}.tsv'
+  CLEAN_FN = f'{OUT_DIR}/hi_central_data_clean_{curr_dt}.tsv'
+  FAIL_FN  = f'{OUT_DIR}/hi_central_failed_prop_id_list_{curr_dt}.tsv'
+  WEB_DEST = os.path.join(PROJECT_DIR, 'web', 'assets', 'latest_home_data.tsv')
+  WEB_DEST = os.path.abspath(WEB_DEST)
 
   # It will max give me 10 pages of Apartments, so max of 200, so I'm going to need to 
   # do some limitations 
@@ -323,6 +333,9 @@ def main():
                       "12": "Waipahu"
   }
 
+  print(f'\n\nStaring new collection of property IDs across {len(region_dict.keys())}')
+
+
   # If we get back over 200 results, we will play this game of slowly checking specific price ranges
   # so we can in the end get all results for that region
   DOLLAR_SEARCH_LS = [['', 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], 
@@ -340,8 +353,6 @@ def main():
   # ['Kaneohe', 1, 40],
   # ...
   reg_sum_ls = []
-
-  DEBUG = False
 
   # Go through region by region
   for option_id, region in tqdm.tqdm(region_dict.items()):
@@ -408,6 +419,7 @@ def main():
 
         n_ids = len(curr_id_ls)
         region_id_ls.append(curr_id_ls)
+        
         if DEBUG:
             print(f'More than 200 IDs:\n\tURL:\t{curr_url}\n\tMin Dollar:\t{MIN_DOLLAR}\n\tMax Dollar:\t{MAX_DOLLAR}\n\tIDs:\t{n_ids}\n\tPages:\t{n_pages}')
 
@@ -430,7 +442,7 @@ def main():
   
     reg_sum_ls.append([region, n_pages, n_ids])
     fin_id_ls.append(region_id_ls)
-     
+    
     if DEBUG:
       print("==============================================================")
           
@@ -446,6 +458,9 @@ def main():
   # Now get information about each propery
   # Collect the actual home data
   fin_id_ls = fin['id'].unique().tolist()
+
+  print(f'Finished collecting {len(fin_id_ls)} across {len(fin['region'].unique().tolist())} regions!')
+  print(f'Moving onto collecting information about each property (ID)...')
 
   # Will log property information we were able to successfully get
   home_data_ls = []
@@ -466,13 +481,14 @@ def main():
       fail = False
 
     except Exception as e:
-      print(f'Failed on {curr_id}:\t{curr_url}\n\t\t{e}')   
+      if DEBUG:
+        print(f'Failed on {curr_id}:\t{curr_url}\n\t\t{e}')   
       fail = True
 
     if fail:
-        failed_ls.append(curr_id)
+      failed_ls.append(curr_id)
     else:        
-        home_data_ls.append(curr_page_dat)
+      home_data_ls.append(curr_page_dat)
           
 
   # Finally make a dataframe for all properties we succeeded in grabbing data for
@@ -501,20 +517,37 @@ def main():
                     (clean['lat'] == '-')), ]
 
 
+  print(f'Finished collecting all property information, saving results...')
 
   # Save the output of this run - including a raw version, a cleaned version and the list of failed property IDs for
   # future trouble shooting
-  home_data.to_csv(f'{OUT_DIR}/hi_central_data_{curr_dt}.tsv', sep = '\t', index = False)
-  clean.to_csv(f'{OUT_DIR}/hi_central_data_clean_{curr_dt}.tsv', sep = '\t', index = False)
 
-  fail_fn = f'{OUT_DIR}/hi_central_failed_prop_id_list_{curr_dt}.tsv'
-  with open(fail_fn, 'w') as f:
+
+  home_data.to_csv(RAW_FN, sep = '\t', index = False)
+  clean.to_csv(CLEAN_FN, sep = '\t', index = False)
+
+  with open(FAIL_FN, 'w') as f:
     for curr_fail in failed_ls:
       f.write(f"{curr_fail}\n")
 
 
   # Copy the latest version of clean data in web/assets/ for use with website
-  shutil.copy2(f'{OUT_DIR}/hi_central_data_{curr_dt}_clean.tsv', f'../web/assets/latest_home_data.tsv')
+  try:
+    shutil.copy2(CLEAN_FN, WEB_DEST)
+    print(f"Copied {CLEAN_FN}\n\t->\t{WEB_DEST}.")
+
+  except FileNotFoundError:
+    print(f"Source file {CLEAN_FN} not found.")
+
+  except PermissionError:
+    print(f"Permission denied while copying to:\n\t{WEB_DEST}.")
+
+  except Exception as e:
+    print(f"An error occurred: {e}")
+
+
+  print(f'All done!')
+
 
 if __name__ == "__main__":
   main()
