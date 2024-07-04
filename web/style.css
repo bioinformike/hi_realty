@@ -15,16 +15,22 @@ html, body, #map {
     position: absolute;
     top: 0;
     left: 0;
-    background: white;
+    background: rgb(150, 84, 88);
     z-index: 1000;
-    padding: 5px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
     overflow-y: auto;
     transition: 0.3s;
   }
   
   #sidebar.collapsed {
     width: 50px;
-    padding: 10px 0;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
   }
   
   #sidebarToggle {
@@ -41,7 +47,10 @@ html, body, #map {
   
   #sidebarToggle img {
     width: 100%;
-    height: auto;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
   
   #sidebar.collapsed + #sidebarToggle {
@@ -114,4 +123,39 @@ input[type="number"] {
     margin: 0 10px;
     font-size: 16px;
     text-align: center;
+}
+
+.carousel-item img {
+  width: 100%; /* Ensures the image takes up full width of the carousel container */
+  height: 300px; 
+  object-fit: cover; /* Ensures the image covers the entire area, maintaining aspect ratio */
+}
+
+.leaflet-popup-content p {
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+}
+
+
+.carousel-control-next-icon {
+  background-size: contain; /* Ensure the icon fits within the button */
+  width: 40px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  background-color: #ff6347FF;
+  color: #242424;
+}
+
+.carousel-control-prev-icon {
+  background-size: contain; /* Ensure the icon fits within the button */
+  width: 40px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  background-color: #ff6347FF;
+}
+
+.carousel-control-next-icon:hover {
+  background-color: #ff6347FF;
+}
+
+.carousel-control-prev-icon:hover {
+  background-color: #ff6347FF;
 }

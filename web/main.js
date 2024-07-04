@@ -1,252 +1,221 @@
-// import { loadHomeData,  parseTSV, min, max} from './helper.js';
+let map, markers = [], data = []; 
 
-// Initialize map
-const map = L.map('map').setView([21.467, -157.983], 11);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-  subdomains: 'abcd',
-  maxZoom: 20
-}).addTo(map);
+let currentType = 'Long Term';
+let popup_w = 600;
+let popup_h = 600;
 
 
 
-let filtData;
-
-
-
-Papa.parse('./assets/latest_home_data.tsv', {
-  download: true,
-  header : true,
-
-  complete: function(results) {
-    console.log("Original data:", results.data);
-
-    // Filter the data based on your criteria
-    filtData = results.data.filter(row => {
-      const hasValidLat = row.lat !== 'NA';
-      const hasValidLon = row.lon !== 'NA';
-      const isActive = row.active_status_str === 'Active';
-
-      return hasValidLat && hasValidLon && isActive;
-    });
-
-    console.log("Filtered data:", filtData);
-  }
+document.addEventListener('DOMContentLoaded', function() {
+  initMap();
+  loadData();
+  initSidebar();
 });
 
-//     window.data = data.filter(row => {
-//       const hasValidLat = row.lat !== 'NA';
-//       const hasValidLon = row.lon !== 'NA';
-//       const isActive = row.active_status_str === 'Active';
+function initMap() {
+  map = L.map('map').setView([21.467, -157.983], 11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20,
+    zoomControl: false,
+  }).addTo(map);
 
-//       return hasValidLat && hasValidLon && isActive;
-//     });
+  map.zoomControl.setPosition('bottomright');
+}
 
-//     // console.log("Filtered Data:", window.data);
+function updateMap() {
+  markers.forEach(marker => map.removeLayer(marker));
+  markers = [];
 
-//     // Initialize minPrice and maxPrice
-//     if (window.data.length > 0) {
-//       const firstPrice = parseFloat(window.data[0].curr_price.replace(/[^0-9.-]+/g, ""));
-//       window.minPrice = firstPrice;
-//       window.maxPrice = firstPrice;
-//     } else {
-//       window.minPrice = Infinity;
-//       window.maxPrice = -Infinity;
-//     }
+  const minPriceElement = document.getElementById('minPrice');
+  const maxPriceElement = document.getElementById('maxPrice');
+  const bedroomsElement = document.getElementById('bedrooms');
+  const fullBathsElement = document.getElementById('fullBaths');
+  const halfBathsElement = document.getElementById('halfBaths');
+  const parkingElement = document.getElementById('parking');
 
-//     // Iterate over the data to find min and max prices
-//     window.data.forEach(property => {
-//       const currency = property.curr_price;
-//       const price = parseFloat(currency.replace(/[^0-9.-]+/g, ""));
-//       // console.log("Parsed Price:", price);
+  const minPrice = minPriceElement ? parseFloat(minPriceElement.value) : 0;
+  const maxPrice = maxPriceElement ? parseFloat(maxPriceElement.value) : Infinity;
+  const bedrooms = bedroomsElement ? parseInt(bedroomsElement.value) : 0;
+  const fullBaths = fullBathsElement ? parseInt(fullBathsElement.value) : 0;
+  const halfBaths = halfBathsElement ? parseInt(halfBathsElement.value) : 0;
+  const parking = parkingElement ? parseInt(parkingElement.value) : 0;
 
-//       if (price < window.minPrice) {
-//         window.minPrice = price;
-//       }
-//       if (price > window.maxPrice) {
-//         window.maxPrice = price;
-//       }
+  const filteredData = data.filter(property => {
+    const price = parseFloat(property.curr_price.replace(/[^0-9.-]+/g, ""));
+    return price >= minPrice && price <= maxPrice &&
+           parseInt(property.bedrooms) >= bedrooms &&
+           parseInt(property.full_baths) >= fullBaths &&
+           parseInt(property.half_baths) >= halfBaths &&
+           parseInt(property.parking) >= parking;
+  });
 
-//       // Additional property processing if needed
-//       const lat = parseFloat(property.lat);
-//       const lon = parseFloat(property.lon);
-      
-//       if (isNaN(lat) || isNaN(lon)) {
-//         console.error("Invalid LatLng object for row:", property);
-//         return; // Skip this iteration if lat or lon is not a valid number
-//       }
+  filteredData.forEach(property => {
+    const lat = parseFloat(property.lat);
+    const lon = parseFloat(property.lon);
+    const marker = L.marker([lat, lon]).addTo(map);
+    
+    const popupContent = createPopupContent(property);
+    const options = {minWidth: popup_w, maxWidth: popup_w, 
+                     minHeight: popup_h, maxHeight: popup_h};
+    marker.bindPopup(popupContent, options);
+    markers.push(marker);
+  });
+}
 
-//       const address = property.clean_full_add;
-//       const bedrooms = property.bedrooms;
-//       const fullBaths = property.full_baths;
-//       const halfBaths = property.half_baths;
-//       const parking = property.parking;
-//       const imgUrls = property.img_urls.split(',').map(url => url.trim());
+function createPopupContent(property) {
+  const imgUrlsString = property.img_urls.replace(/'/g, '"');
+  const imgUrls = JSON.parse(imgUrlsString);
+  const carouselId = `carousel-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const halfBathsLine = property.half_baths > 0 ? `<p class=popup-datum>Half Baths: ${property.half_baths}</p>` : '';
 
-//       const popupContent = `
-//         <div>
-//           <h5>${address}</h5>
-//           <p>Price: ${price}</p>
-//           <p>Bedrooms: ${bedrooms}</p>
-//           <p>Full Baths: ${fullBaths}</p>
-//           <p>Half Baths: ${halfBaths}</p>
-//           <p>Parking Spots: ${parking}</p>
-//           <div id="carousel${lat}-${lon}" class="carousel slide" data-ride="carousel">
-//             <div class="carousel-inner">
-//               ${imgUrls.map((url, index) => `
-//                 <div class="carousel-item ${index === 0 ? 'active' : ''}">
-//                   <img src="${url}" class="d-block w-100" alt="...">
-//                 </div>
-//               `).join('')}
-//             </div>
-//             <a class="carousel-control-prev" href="#carousel${lat}-${lon}" role="button" data-slide="prev">
-//               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-//               <span class="sr-only">Previous</span>
-//             </a>
-//             <a class="carousel-control-next" href="#carousel${lat}-${lon}" role="button" data-slide="next">
-//               <span class="carousel-control-next-icon" aria-hidden="true"></span>
-//               <span class="sr-only">Next</span>
-//             </a>
-//           </div>
-//         </div>
-//       `;
-
-//       L.marker([lat, lon]).addTo(map).bindPopup(popupContent);
-//     });
-
-//     console.log("Data loaded and processed");
-//     console.log("Min Price:", window.minPrice);
-//     console.log("Max Price:", window.maxPrice);
-//     console.log("Processed Data:", window.data);
-//   });
-// }
-
-// // Call the function to see the logs
-// const home_data = loadAndProcHomeData();
+  return `
+    <div>
+      <h4>${property.clean_full_add}</h4>
+      <p class=popup-datum>Bedrooms: ${property.bedrooms}</p>
+      <p class=popup-datum>Full Baths: ${property.full_baths}</p>
+      ${halfBathsLine}
+      <p class=popup-datum>Price: ${property.curr_price}</p>
+      <p class=popup-datum>Parking Spots: ${property.parking}</p>
+      <div id="${carouselId}" class="carousel slide" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner">
+          ${imgUrls.map((url, index) => `
+            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+              <img src="${url}" class="d-block w-100" alt="Property Image">
+            </div>
+          `).join('')}
+        </div>
+        <a class="carousel-control-prev" href="#${carouselId}" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#${carouselId}" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+  `;
+}
 
 
+function loadData() {
+  console.log('Starting to load data...');
+  Papa.parse('./assets/latest_home_data.tsv', {
+    download: true,
+    header: true,
+    delimiter: '\t',
+    skipEmptyLines: true,
+    complete: function(results) {
+      console.log('Papa Parse complete. Raw results:', results);
+      if (results.errors && results.errors.length > 0) {
+        console.error('Papa Parse encountered errors:', results.errors);
+      }
+      if (results.data && results.data.length > 0) {
+        data = results.data.filter(row => {
+          return row.lat !== 'NA' && row.lon !== 'NA' && row.active_status_str === 'Active';
+        });
+        console.log(`Filtered data. ${data.length} rows remaining.`);
+        initializeFilters();
+        initFilters();
+        updateMap();
+      } else {
+        console.error('No data was parsed from the file.');
+      }
+    },
+    error: function(error) {
+      console.error('Error occurred while parsing:', error);
+    }
+  });
+}
 
+function initializeFilters() {
+  const priceValues = data.map(d => parseFloat(d.curr_price.replace(/[^0-9.-]+/g, "")));
+  const minPrice = Math.min(...priceValues);
+  const maxPrice = Math.max(...priceValues);
 
-      //   const popupContent = `
-      //     <div>
-      //       <h5>${address}</h5>
-      //       <p>Price: ${price}</p>
-      //       <p>Bedrooms: ${bedrooms}</p>
-      //       <p>Full Baths: ${fullBaths}</p>
-      //       <p>Half Baths: ${halfBaths}</p>
-      //       <p>Parking Spots: ${parking}</p>
-      //       <div id="carousel${lat}-${lon}" class="carousel slide" data-ride="carousel">
-      //         <div class="carousel-inner">
-      //           ${imgUrls.map((url, index) => `
-      //             <div class="carousel-item ${index === 0 ? 'active' : ''}">
-      //               <img src="${url}" class="d-block w-100" alt="...">
-      //             </div>
-      //           `).join('')}
-      //         </div>
-      //         <a class="carousel-control-prev" href="#carousel${lat}-${lon}" role="button" data-slide="prev">
-      //           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      //           <span class="sr-only">Previous</span>
-      //         </a>
-      //         <a class="carousel-control-next" href="#carousel${lat}-${lon}" role="button" data-slide="next">
-      //           <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      //           <span class="sr-only">Next</span>
-      //         </a>
-      //       </div>
-      //     </div>
-      //   `;
+  const minPriceInput = document.getElementById('minPrice');
+  const maxPriceInput = document.getElementById('maxPrice');
+  const priceRangeMin = document.getElementById('priceRangeMin');
+  const priceRangeMax = document.getElementById('priceRangeMax');
+
+  if (minPriceInput && maxPriceInput && priceRangeMin && priceRangeMax) {
+    minPriceInput.value = minPrice;
+    maxPriceInput.value = maxPrice;
+    priceRangeMin.min = minPrice;
+    priceRangeMin.max = maxPrice;
+    priceRangeMin.value = minPrice;
+    priceRangeMax.min = minPrice;
+    priceRangeMax.max = maxPrice;
+    priceRangeMax.value = maxPrice;
+  }
+
+  ['bedrooms', 'fullBaths', 'halfBaths', 'parking'].forEach(field => {
+    const slider = document.getElementById(field);
+    if (slider) {
+      const max = Math.max(...data.map(d => parseInt(d[field]) || 0));
+      slider.max = max;
+    }
+  });
+}
+
+function initSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
   
-      //   L.marker([lat, lon]).addTo(map).bindPopup(popupContent);
-      // });
+  if (sidebar) {
+    sidebar.classList.remove('collapsed');
+  }
   
-//       // Set up range sliders
-//       const priceRange = document.getElementById('priceRange');
-//       const bedrooms = document.getElementById('bedrooms');
-//       const fullBaths = document.getElementById('fullBaths');
-//       const halfBaths = document.getElementById('halfBaths');
-//       const parking = document.getElementById('parking');
+  if (sidebar && sidebarToggle) {
+    sidebarToggle.onclick = function() {
+      sidebar.classList.toggle('collapsed');
+      sidebarToggle.querySelector('img').src = sidebar.classList.contains('collapsed') 
+        ? 'assets/arrow-square-right.svg' 
+        : 'assets/arrow-square-left.svg';
+      setTimeout(() => map.invalidateSize(), 300);
+    };
+  }
+}
+
+function initFilters() {
+  const priceRangeMin = document.getElementById('priceRangeMin');
+  const priceRangeMax = document.getElementById('priceRangeMax');
+  const minPriceInput = document.getElementById('minPrice');
+  const maxPriceInput = document.getElementById('maxPrice');
+
+  if (priceRangeMin && priceRangeMax && minPriceInput && maxPriceInput) {
+    [priceRangeMin, priceRangeMax, minPriceInput, maxPriceInput].forEach(el => {
+      el.addEventListener('input', updatePriceRange);
+    });
+  }
+
+  ['bedrooms', 'fullBaths', 'halfBaths', 'parking'].forEach(field => {
+    const slider = document.getElementById(field);
+    const valueSpan = document.getElementById(`${field}Value`);
+    if (slider && valueSpan) {
+      slider.addEventListener('input', () => {
+        valueSpan.textContent = slider.value > 0 ? `${slider.value}+` : 'Any';
+      });
+    }
+  });
+
+  const applyFiltersButton = document.getElementById('applyFilters');
+  if (applyFiltersButton) {
+    applyFiltersButton.addEventListener('click', updateMap);
+  }
+}
+
+function updatePriceRange() {
+  const minPrice = parseFloat(minPriceInput.value);
+  const maxPrice = parseFloat(maxPriceInput.value);
   
-//       const priceValues = filteredData.map(d => parseFloat(d.curr_price));
-//       const bedroomsValues = filteredData.map(d => parseInt(d.bedrooms));
-//       const fullBathsValues = filteredData.map(d => parseInt(d.full_baths));
-//       const halfBathsValues = filteredData.map(d => parseInt(d.half_baths));
-//       const parkingValues = filteredData.map(d => parseInt(d.parking));
+  priceRangeMin.value = minPrice;
+  priceRangeMax.value = maxPrice;
   
-//       priceRange.min = Math.min(...priceValues);
-//       priceRange.max = Math.max(...priceValues);
-//       bedrooms.max = Math.max(...bedroomsValues);
-//       fullBaths.max = Math.max(...fullBathsValues);
-//       halfBaths.max = Math.max(...halfBathsValues);
-//       parking.max = Math.max(...parkingValues);
-  
-//       // Display filter values
-//       document.getElementById('priceRangeValue').textContent = priceRange.value;
-//       document.getElementById('bedroomsValue').textContent = bedrooms.value;
-//       document.getElementById('fullBathsValue').textContent = fullBaths.value;
-//       document.getElementById('halfBathsValue').textContent = halfBaths.value;
-//       document.getElementById('parkingValue').textContent = parking.value;
-  
-//       // Update displayed values on input change
-//       priceRange.oninput = () => document.getElementById('priceRangeValue').textContent = priceRange.value;
-//       bedrooms.oninput = () => document.getElementById('bedroomsValue').textContent = bedrooms.value;
-//       fullBaths.oninput = () => document.getElementById('fullBathsValue').textContent = fullBaths.value;
-//       halfBaths.oninput = () => document.getElementById('halfBathsValue').textContent = halfBaths.value;
-//       parking.oninput = () => document.getElementById('parkingValue').textContent = parking.value;
-//     }
-//   });
-  
-//   document.addEventListener('DOMContentLoaded', function() {
-//     var rangeMin = document.getElementById('rangeMin');
-//     var rangeMax = document.getElementById('rangeMax');
-//     var minValueInput = document.getElementById('minValue');
-//     var maxValueInput = document.getElementById('maxValue');
-
-//     function updateValues() {
-//         minValueInput.value = rangeMin.value;
-//         maxValueInput.value = rangeMax.value;
-//     }
-
-//     rangeMin.addEventListener('input', function() {
-//         if (parseInt(rangeMin.value) >= parseInt(rangeMax.value)) {
-//             rangeMin.value = parseInt(rangeMax.value) - 1;
-//         }
-//         updateValues();
-//     });
-
-//     rangeMax.addEventListener('input', function() {
-//         if (parseInt(rangeMax.value) <= parseInt(rangeMin.value)) {
-//             rangeMax.value = parseInt(rangeMin.value) + 1;
-//         }
-//         updateValues();
-//     });
-
-//     minValueInput.addEventListener('input', function() {
-//         if (parseInt(minValueInput.value) < parseInt(rangeMax.value) && parseInt(minValueInput.value) >= rangeMin.min) {
-//             rangeMin.value = minValueInput.value;
-//         } else {
-//             minValueInput.value = rangeMin.value;
-//         }
-//     });
-
-//     maxValueInput.addEventListener('input', function() {
-//         if (parseInt(maxValueInput.value) > parseInt(rangeMin.value) && parseInt(maxValueInput.value) <= rangeMax.max) {
-//             rangeMax.value = maxValueInput.value;
-//         } else {
-//             maxValueInput.value = rangeMax.value;
-//         }
-//     });
-
-//     updateValues(); // Initial call to set values correctly
-// });
-
-
-
-//   // Sidebar toggle
-//   document.getElementById('sidebarToggle').onclick = function() {
-//     const sidebar = document.getElementById('sidebar');
-//     const sidebarToggle = document.getElementById('sidebarToggle');
-//     sidebar.classList.toggle('collapsed');
-//     sidebarToggle.querySelector('img').src = sidebar.classList.contains('collapsed') 
-//       ? 'assets/arrow-square-right.svg' 
-//       : 'assets/arrow-square-left.svg';
-//     setTimeout(() => map.invalidateSize(), 300);  // Adjust map size after animation
-//   };
+  if (minPrice > maxPrice) {
+    maxPriceInput.value = minPrice;
+    priceRangeMax.value = minPrice;
+  }
+}
