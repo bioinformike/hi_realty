@@ -294,7 +294,7 @@ def get_id_page_w_api(input_id):
                 land_area, live_area, lanai_area, other_area,
                 island, region, hood, pets_allowed, res_man, deposit, term, description,
                 unit_features, parking_features, frontage, view, furnished, amenities, pool, inclusions, 
-                build_style, disclosures, img_urls]
+                build_style, disclosures, img_urls, curr_url]
 
 
 # Our main function that does all the parsing
@@ -501,7 +501,7 @@ def main():
                                     'island', 'region', 'hood', 'pets_allowed', 'res_man', 'deposit', 'term', 'description',
                                     'unit_features', 'parking_features', 'frontage', 'view', 'furnished', 
                                     'amenities', 'pool', 'inclusions', 
-                                    'build_style', 'disclosures', 'img_urls'])
+                                    'build_style', 'disclosures', 'img_urls', 'orig_url'])
 
 
   # Little bit of clean up
