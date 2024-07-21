@@ -1,71 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Map</title>
 
-  <title>Property Map</title>
+    <!-- External Styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- External Styling -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Our styles -->
+    <link rel="stylesheet" href="style.css">
 
-  <!-- External JS Libraries -->
-  <script  src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-  <script  src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script  src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-  <script  src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <!-- External JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
 
-  <!-- Our styles and JS  -->
-  <link rel="stylesheet" href="style.css">
-  <script defer src="./main.js"></script>
-
-
-
+    <!-- Our JS -->
+    <script defer src="./main.js"></script>
 </head>
 <body>
-  <div id="sidebar">
-    <h4>Filters</h4>
-    
-    <label for="priceRange">Price Range:</label>
-    <div class="slider-container">
-      <input type="number" id="minValue" value="10" min="0" max="100">
-      <div class="slider">
-          <input type="range" id="rangeMin" min="0" max="100" value="10">
-          <input type="range" id="rangeMax" min="0" max="100" value="90">
-      </div>
-      <input type="number" id="maxValue" value="90" min="0" max="100">
+    <div id="sidebar">
+        <h4>Filters</h4>
+        
+        <div class="filter-item">
+            <label for="price-range-slider">
+                <i class="fa-solid fa-dollar-sign"></i>
+                <span class="filter-label">Price Range</span>
+            </label>
+            <div class="slider-container">
+                <div id="price-range-slider"></div>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <label for="bedrooms-slider">
+                <i class="fa-solid fa-bed"></i>
+                <span class="filter-label">Bedrooms</span>
+            </label>
+            <div class="slider-container">
+                <div id="bedrooms-slider"></div>
+                <span id="bedrooms-slider-value" class="slider-value"></span>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <label for="fullbaths-slider">
+                <i class="fa-solid fa-bath"></i>
+                <span class="filter-label">Full Baths</span>
+            </label>
+            <div class="slider-container">
+                <div id="fullbaths-slider"></div>
+                <span id="fullbaths-slider-value" class="slider-value"></span>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <label for="halfbaths-slider">
+                <i class="fa-solid fa-toilet"></i>
+                <span class="filter-label">Half Baths</span>
+            </label>
+            <div class="slider-container">
+                <div id="halfbaths-slider"></div>
+                <span id="halfbaths-slider-value" class="slider-value"></span>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <label for="parking-slider">
+                <i class="fa-solid fa-car"></i>
+                <span class="filter-label">Parking Spots</span>
+            </label>
+            <div class="slider-container">
+                <div id="parking-slider"></div>
+                <span id="parking-slider-value" class="slider-value"></span>
+            </div>
+        </div>
+
+        <div class="filter-item pets-filter">
+            <label for="pets-allowed">
+                <i class="fa-solid fa-paw" id="pets-icon"></i>
+                <span class="filter-label">Pets Allowed</span>
+            </label>
+            <input type="checkbox" id="pets-allowed">
+        </div>
     </div>
 
-    <br>
-    <label for="bedrooms">Bedrooms:</label>
-    <input type="range" id="bedrooms" min="0" max="10" step="1" value="0">
-    <span id="bedroomsValue"></span>
-    <br>
-    <label for="fullBaths">Full Baths:</label>
-    <input type="range" id="fullBaths" min="0" max="5" step="1" value="0">
-    <span id="fullBathsValue"></span>
-    <br>
-    <label for="halfBaths">Half Baths:</label>
-    <input type="range" id="halfBaths" min="0" max="3" step="1" value="0">
-    <span id="halfBathsValue"></span>
-    <br>
-    <label for="parking">Parking Spots:</label>
-    <input type="range" id="parking" min="0" max="5" step="1" value="0">
-    <span id="parkingValue"></span>
-  </div>
+    <div id="sidebarToggle">
+        <i class="fa-regular fa-square-caret-left"></i>
+    </div>
 
-  <div class="toggle-container">
-    <label class="switch">
-      <input type="checkbox" id="currTypeToggle">
-      <span class="slider round"></span>
-    </label>
-    <span id="currTypeLabel">Long Term</span>
-  </div>
-  <div id="sidebarToggle">
-    <img src="assets/arrow-square-left.svg" alt="Collapse Sidebar">
-  </div>
-  <div id="map"></div>
-
+    <div id="map"></div>
 </body>
 </html>

@@ -1,161 +1,339 @@
+/* Global Styles */
 html, body, #map {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  #map {
-    transition: margin-left 0.3s;
-  }
-  
-  #sidebar {
-    width: 275px;
-    max-width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: rgb(150, 84, 88);
-    z-index: 1000;
-    padding-left: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 0px;
-    overflow-y: auto;
-    transition: 0.3s;
-  }
-  
-  #sidebar.collapsed {
-    width: 50px;
-    padding-left: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 0px;
-  }
-  
-  #sidebarToggle {
-    position: absolute;
-    top: 05%;
-    left: 247px; /* Adjust to place the button on the separating line */
-    z-index: 1100;
-    width: 40px;  /* Double the size */
-    height: 40px;  /* Double the size */
-    cursor: pointer;
-    transition: left 0.3s, transform 0.3s;
-    transform: translate(-50%, -50%);
-  }
-  
-  #sidebarToggle img {
-    width: 100%;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  
-  #sidebar.collapsed + #sidebarToggle {
-    left: 47px;
-  }
-  
-  #sidebar.collapsed ~ #map {
-    margin-left: 50px;
-  }
-  
-  #sidebar ~ #map {
-    margin-left: 250px;
-  }
-  
-  #sidebar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: -3px;
-    width: 3px;
-    height: 100%;
-    background: #242424;
-    z-index: 999;
-  }
-  
-  .slider-container {
-    display: flex;
-    align-items: center;
-    width: 80%;
-    max-width: 600px;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-.slider {
-    position: relative;
-    width: 100%;
-    margin: 0 10px;
+/* Map Styles */
+#map {
+  transition: margin-left 0.3s;
 }
 
-input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 5px;
-    background: #ddd;
-    outline: none;
-    position: absolute;
+/* Sidebar Styles */
+#sidebar {
+  width: 275px;
+  max-width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(150, 84, 88);
+  z-index: 1000;
+  padding: 18px;
+  overflow: hidden;
+  transition: 0.3s;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #007bff;
-    border-radius: 50%;
-    cursor: pointer;
+#sidebar.collapsed {
+  width: 60px;
+  padding: 10px 5px;
 }
 
-input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #007bff;
-    border-radius: 50%;
-    cursor: pointer;
+#sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 3px;
+  height: 100%;
+  background: #242424;
+  z-index: 999;
 }
 
-input[type="number"] {
-    width: 60px;
-    padding: 5px;
-    margin: 0 10px;
-    font-size: 16px;
-    text-align: center;
+#sidebar h4 {
+  transition: opacity 0.3s;
+  color: white;
+  margin-bottom: 20px;
+}
+
+#sidebar.collapsed h4 {
+  opacity: 0;
+}
+
+/* Filter Item Styles */
+.filter-item {
+  margin-bottom: 55px;
+  transition: transform 0.3s;
+}
+
+.filter-item label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+  color: white;
+}
+
+.filter-item label i {
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  transition: margin 0.3s;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-label {
+  transition: opacity 0.3s, width 0.3s;
+}
+
+/* Slider Styles */
+.slider-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.noUi-horizontal {
+  height: 8px;
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.slider-value {
+  color: white;
+  font-size: 14px;
+  min-width: 60px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* noUiSlider Custom Styles */
+.noUi-connect {
+  background: #3498db;
+}
+
+.noUi-handle {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50%;
+  background: #3498db;
+  box-shadow: none;
+  border: none;
+  right: -9px !important;
+}
+
+.noUi-handle:before, 
+.noUi-handle:after {
+  display: none;
+}
+
+.noUi-tooltip {
+  display: none;
+}
+
+/* Pips Styles */
+.noUi-pips {
+  padding: 10px 0 20px; /* Added padding at the bottom */
+}
+
+.noUi-value {
+  color: white;
+  font-size: 12px;
+  transform: translate(-50%, 50%);
+}
+
+.noUi-marker {
+  display: none;
+}
+
+.noUi-marker-horizontal.noUi-marker-large {
+  display: block;
+  background: white;
+  width: 2px;
+  height: 8px;
+}
+
+.noUi-value-large {
+  font-weight: bold;
+}
+
+/* Hide small pips and show only large ones */
+.noUi-marker-normal {
+  display: none;
+}
+
+.noUi-value-horizontal {
+  transform: translate(-50%, 100%);
+  margin-top: -10px; /* Increased from 5px */
+  font-size: 12px;
+}
+
+/* Specific style for price slider to show all pips */
+#price-range-slider .noUi-marker {
+  display: block;
+}
+
+/* Pets Filter Styles */
+.pets-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.pets-filter label {
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+
+#pets-allowed {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.fa-paw {
+  transition: color 0.3s;
+}
+
+.pets-allowed-checked {
+  color: #3498db;
+}
+
+/* Collapsed Sidebar Styles */
+#sidebar.collapsed .filter-item {
+  transform: translateX(0);
+  margin-bottom: 40px;
+}
+
+#sidebar.collapsed .filter-item label {
+  justify-content: center;
+}
+
+#sidebar.collapsed .filter-item label i {
+  margin-right: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 28px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+#sidebar.collapsed .filter-label,
+#sidebar.collapsed .slider-container,
+#sidebar.collapsed .slider-value,
+#sidebar.collapsed .pets-filter input[type="checkbox"] {
+  display: none;
+}
+
+/* Sidebar Toggle Button Styles */
+#sidebarToggle {
+  position: absolute;
+  top: 20px;
+  left: 275px;
+  z-index: 1100;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: left 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(150, 84, 88);
+  border-radius: 0 5px 5px 0;
+}
+
+#sidebarToggle i {
+  font-size: 28px;
+  color: white;
+}
+
+#sidebar.collapsed + #sidebarToggle {
+  left: 60px;
+}
+
+/* Map Margin Adjustment */
+#sidebar ~ #map {
+  margin-left: 275px;
+  transition: margin-left 0.3s;
+}
+
+#sidebar.collapsed ~ #map {
+  margin-left: 60px;
+}
+
+/* Popup Styles */
+.leaflet-popup-content {
+  max-width: 400px;
+  font-family: Arial, sans-serif;
+}
+
+.popup-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.popup-left {
+  text-align: left;
+}
+
+.popup-right {
+  text-align: right;
+}
+
+.popup-full {
+  grid-column: 1 / -1;
+}
+
+.popup-header {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.popup-datum {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.popup-datum strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-description {
+  font-style: italic;
+  margin: 10px 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.popup-url {
+  font-size: 12px;
+  word-break: break-all;
+}
+
+/* Carousel Styles */
+.carousel {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .carousel-item img {
-  width: 100%; /* Ensures the image takes up full width of the carousel container */
-  height: 300px; 
-  object-fit: cover; /* Ensures the image covers the entire area, maintaining aspect ratio */
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
-.leaflet-popup-content p {
-  margin-top: 0.15em;
-  margin-bottom: 0.15em;
-}
-
-
-.carousel-control-next-icon {
-  background-size: contain; /* Ensure the icon fits within the button */
-  width: 40px; /* Adjust width as needed */
-  height: 40px; /* Adjust height as needed */
-  background-color: #ff6347FF;
-  color: #242424;
-}
-
+.carousel-control-next-icon,
 .carousel-control-prev-icon {
-  background-size: contain; /* Ensure the icon fits within the button */
-  width: 40px; /* Adjust width as needed */
-  height: 40px; /* Adjust height as needed */
+  background-size: contain;
+  width: 40px;
+  height: 40px;
   background-color: #ff6347FF;
 }
 
-.carousel-control-next-icon:hover {
-  background-color: #ff6347FF;
-}
-
+.carousel-control-next-icon:hover,
 .carousel-control-prev-icon:hover {
   background-color: #ff6347FF;
 }
