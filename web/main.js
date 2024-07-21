@@ -272,37 +272,40 @@ function createPopupContent(property) {
   return `
     <div class="popup-content">
       <div class="popup-left">
-        <h5>${property.street_add}</h5>
-        <h5>${property.city}</h5>
-
-
+        <p class="popup-header-item">${property.street_add}</p>
+        <p class="popup-header-item">${property.city}</p>
       </div>
       <div class="popup-right">
-        <h5>Price:      ${property.curr_price}</h5>
-        <h5>Term:       ${property.term}</h5>
-        <h5>Deposit:    ${property.deposit}</h5>
-        <h5>Date Avail: ${property.curr_date}</h5>
+        <p class="popup-header-item">Price: ${property.curr_price}</p>
+        <p class="popup-header-item">Term: ${property.term}</p>
+        <p class="popup-header-item">Deposit: ${property.deposit}</p>
+        <p class="popup-header-item">Date Avail: ${property.curr_date}</p>
       </div>
-
-
 
       <div class="popup-left">
         <p class="popup-datum"><strong>Bedrooms:</strong> ${property.bedrooms}</p>
         <p class="popup-datum"><strong>Full Baths:</strong> ${property.full_baths}</p>
         ${halfBathsLine}
-      <p class="popup-datum"><strong>Parking:</strong> ${property.parking}</p>
+        <p class="popup-datum"><strong>Parking:</strong> ${property.parking}</p>
+        <p class="popup-datum-addl">${property.parking_features}</p>
+        <p class="popup-datum"><strong>Frontage:</strong> ${property.frontage}</p>
+        <p class="popup-datum"><strong>View:</strong> ${property.view}</p>
 
       </div>
       
       <div class="popup-right">
         <p class="popup-datum"><strong>Neighborhood:</strong> ${property.hood}</p>
         <p class="popup-datum"><strong>Region:</strong> ${property.region}</p>
+        ${petsAllowed}
+        <p class="popup-datum"><strong>Furnished:</strong> ${property.furnished}</p>
       </div>
       
       <div class="popup-full">
-        <p class="popup-description">${property.description}</p>
+        <p class="popup-datum-title">Unit Features:</p>
+        <p class="popup-datum">${property.unit_features}</p>
+        <p class="popup-datum-title">Amenities:</p>
+        <p class="popup-datum">${property.amenities}</p>
       </div>
-      <br>
       <div class="popup-full">
         <div id="${carouselId}" class="carousel slide" data-ride="carousel" data-interval="false">
           <div class="carousel-inner">
@@ -322,10 +325,14 @@ function createPopupContent(property) {
           </a>
         </div>
       </div>
-      
+      <div class="popup-full">
+        <p class="popup-description">${property.description}</p>
+      </div>
       <div class="popup-full">
         <p class="popup-datum popup-url"><a href="${property.orig_url}" target="_blank">View listing</a></p>
       </div>
     </div>
+    
   `;
 }
+

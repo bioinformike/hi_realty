@@ -319,7 +319,7 @@ html, body, #map {
 
 /* Popup Styles */
 .leaflet-popup-content {
-  max-width: 400px;
+  max-width: 500px;
   font-family: Arial, sans-serif;
 }
 
@@ -327,6 +327,10 @@ html, body, #map {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+.popup-header {
+  font-size: 18px;
 }
 
 .popup-left {
@@ -353,17 +357,53 @@ html, body, #map {
   font-size: 14px;
   color: #666;
 }
+.popup-datum-addl {
+  padding-left: 20px;
+  font-size: 12px;
+  font-style: italic;
+  color: #666;
+}
 
 .popup-datum strong {
   font-weight: bold;
   color: #333;
 }
 
+
+.popup-datum-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  padding-top: 5px;
+}
 .popup-description {
   font-style: italic;
-  margin: 10px 0;
   font-size: 13px;
   color: #555;
+  background-color: #f0f0f0; /* Light grey background */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Space inside the box */
+  margin: 10px 0; /* Space above and below the box */
+  border: 1px solid #ddd; /* Light border */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  width: 95%; /* Slightly less than full width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.popup-header-item {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 0px;
+  color: rgb(150, 84, 88);
+}
+
+.popup-left .popup-header-item {
+  text-align: left;
+}
+
+.popup-right .popup-header-item {
+  text-align: right;
 }
 
 .popup-url {
@@ -395,4 +435,24 @@ html, body, #map {
 .carousel-control-next-icon:hover,
 .carousel-control-prev-icon:hover {
   background-color: #ff6347FF;
+}
+
+.leaflet-popup-content p {
+  margin: 0;
+}
+
+#attrib {
+  position: absolute;
+  bottom: 10px;
+  margin: auto;
+  color: white;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+#attrib a {
+  color: white;
+  text-decoration: underline;;
 }
