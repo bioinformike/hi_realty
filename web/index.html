@@ -29,65 +29,78 @@
         <h4>Filters</h4>
         
         <div class="filter-item">
-            <label for="price-range-slider">
-                <i class="fa-solid fa-dollar-sign"></i>
-                <span class="filter-label">Price Range</span>
-            </label>
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span class="filter-label">Price Range</span>
+                </span>
+                <span id="price-range-slider-value" class="slider-value"></span>
+            </div>
             <div class="slider-container">
                 <div id="price-range-slider"></div>
             </div>
         </div>
 
         <div class="filter-item">
-            <label for="bedrooms-slider">
-                <i class="fa-solid fa-bed"></i>
-                <span class="filter-label">Bedrooms</span>
-            </label>
-            <div class="slider-container">
-                <div id="bedrooms-slider"></div>
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fa-solid fa-bed"></i>
+                    <span class="filter-label">Bedrooms</span>
+                </span>
                 <span id="bedrooms-slider-value" class="slider-value"></span>
             </div>
+            <div class="slider-container">
+                <div id="bedrooms-slider"></div>
+            </div>
         </div>
 
         <div class="filter-item">
-            <label for="fullbaths-slider">
-                <i class="fa-solid fa-bath"></i>
-                <span class="filter-label">Full Baths</span>
-            </label>
-            <div class="slider-container">
-                <div id="fullbaths-slider"></div>
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fa-solid fa-bath"></i>
+                    <span class="filter-label">Full Baths</span>
+                </span>
                 <span id="fullbaths-slider-value" class="slider-value"></span>
             </div>
-        </div>
-
-        <div class="filter-item">
-            <label for="halfbaths-slider">
-                <i class="fa-solid fa-toilet"></i>
-                <span class="filter-label">Half Baths</span>
-            </label>
             <div class="slider-container">
-                <div id="halfbaths-slider"></div>
-                <span id="halfbaths-slider-value" class="slider-value"></span>
+                <div id="fullbaths-slider"></div>
             </div>
         </div>
 
         <div class="filter-item">
-            <label for="parking-slider">
-                <i class="fa-solid fa-car"></i>
-                <span class="filter-label">Parking Spots</span>
-            </label>
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fa-solid fa-toilet"></i>
+                    <span class="filter-label">Half Baths</span>
+                </span>
+                <span id="halfbaths-slider-value" class="slider-value"></span>
+            </div>
+            <div class="slider-container">
+                <div id="halfbaths-slider"></div>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fa-solid fa-car"></i>
+                    <span class="filter-label">Parking Spots</span>
+                </span>
+                <span id="parking-slider-value" class="slider-value"></span>
+            </div>
             <div class="slider-container">
                 <div id="parking-slider"></div>
-                <span id="parking-slider-value" class="slider-value"></span>
             </div>
         </div>
 
         <div class="filter-item pets-filter">
-            <label for="pets-allowed">
-                <i class="fa-solid fa-paw" id="pets-icon"></i>
-                <span class="filter-label">Pets Allowed</span>
-            </label>
-            <input type="checkbox" id="pets-allowed">
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fa-solid fa-paw" id="pets-icon"></i>
+                    <span class="filter-label">Pets Allowed</span>
+                </span>
+                <input type="checkbox" id="pets-allowed">
+            </div>
         </div>
     </div>
 
