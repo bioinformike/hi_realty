@@ -261,6 +261,10 @@ function filterProperty(property, filters) {
          (!filters.petsAllowed || property.pets_allowed === 'Yes');
 }
 
+function getUniqueFurnishedOptions() {
+  return [...new Set(data.map(item => item.furnished))].filter(Boolean);
+}
+
 function createPopupContent(property) {
   const imgUrlsString = property.img_urls.replace(/'/g, '"');
   const imgUrls = JSON.parse(imgUrlsString);
