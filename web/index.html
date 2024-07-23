@@ -4,34 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property Map</title>
-
-    <!-- External Styling -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Our styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-
-    <!-- External JS Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
-
-    <!-- Our JS -->
-    <script defer src="./main.js"></script>
 </head>
 <body>
     <div id="sidebar">
         <h4>Filters</h4>
-        
+
         <div class="filter-item">
             <div class="filter-header">
                 <span class="filter-label-wrapper">
-                    <i class="fa-solid fa-dollar-sign"></i>
+                    <i class="fas fa-dollar-sign"></i>
                     <span class="filter-label">Price Range</span>
                 </span>
                 <span id="price-range-slider-value" class="slider-value"></span>
@@ -44,7 +30,7 @@
         <div class="filter-item">
             <div class="filter-header">
                 <span class="filter-label-wrapper">
-                    <i class="fa-solid fa-bed"></i>
+                    <i class="fas fa-bed"></i>
                     <span class="filter-label">Bedrooms</span>
                 </span>
                 <span id="bedrooms-slider-value" class="slider-value"></span>
@@ -57,7 +43,7 @@
         <div class="filter-item">
             <div class="filter-header">
                 <span class="filter-label-wrapper">
-                    <i class="fa-solid fa-bath"></i>
+                    <i class="fas fa-bath"></i>
                     <span class="filter-label">Full Baths</span>
                 </span>
                 <span id="fullbaths-slider-value" class="slider-value"></span>
@@ -70,7 +56,7 @@
         <div class="filter-item">
             <div class="filter-header">
                 <span class="filter-label-wrapper">
-                    <i class="fa-solid fa-toilet"></i>
+                    <i class="fas fa-toilet"></i>
                     <span class="filter-label">Half Baths</span>
                 </span>
                 <span id="halfbaths-slider-value" class="slider-value"></span>
@@ -83,7 +69,7 @@
         <div class="filter-item">
             <div class="filter-header">
                 <span class="filter-label-wrapper">
-                    <i class="fa-solid fa-car"></i>
+                    <i class="fas fa-parking"></i>
                     <span class="filter-label">Parking Spots</span>
                 </span>
                 <span id="parking-slider-value" class="slider-value"></span>
@@ -96,36 +82,42 @@
         <div class="filter-item pets-filter">
             <div class="filter-header">
                 <span class="filter-label-wrapper">
-                    <i class="fa-solid fa-paw" id="pets-icon"></i>
+                    <i id="pets-icon" class="fas fa-paw"></i>
                     <span class="filter-label">Pets Allowed</span>
                 </span>
-                <input type="checkbox" id="pets-allowed">
             </div>
+            <input type="checkbox" id="pets-allowed">
         </div>
 
         <div class="filter-item furnished-filter">
-          <div class="filter-header">
-            <span class="filter-label-wrapper">
-              <i class="fas fa-couch"></i>
-              <span class="filter-label">Furnished</span>
-            </span>
-          </div>
-          <div id="furnished-options" class="checkbox-group">
-            <!-- Checkboxes will be dynamically added here -->
-          </div>
+            <div class="filter-header">
+                <span class="filter-label-wrapper">
+                    <i class="fas fa-couch"></i>
+                    <span class="filter-label">Furnished</span>
+                </span>
+            </div>
+            <div id="furnished-options" class="checkbox-group">
+                <!-- Checkboxes will be dynamically added here -->
+            </div>
         </div>
-      <div id="attrib">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        <a href="https://www.hicentral.com" target="_blank">All data from HiCentral</a>
-      </div>
+
+        <div id="attrib">
+            <a href="https://www.hicentral.com" target="_blank">All data from HiCentral</a>
+        </div>
     </div>
 
     <div id="sidebarToggle">
-        <i class="fa-regular fa-square-caret-left"></i>
+        <i class="fas fa-square-caret-left"></i>
     </div>
 
-
-
     <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

@@ -117,6 +117,8 @@ function initSidebar() {
   }
 
   createSliders();
+  createFurnishedCheckboxes();
+
 }
 
 
@@ -221,6 +223,45 @@ function getPipsConfig(id, min, max, step, isPrice) {
   };
 }
 
+function createFurnishedCheckboxes() {
+  const furnishedOptions = getUniqueFurnishedOptions();
+  const container = document.getElementById('furnished-options');
+  container.innerHTML = ''; // Clear existing content
+
+  const leftColumn = document.createElement('div');
+  leftColumn.className = 'checkbox-column';
+  const rightColumn = document.createElement('div');
+  rightColumn.className = 'checkbox-column';
+
+  furnishedOptions.forEach((option, index) => {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `furnished-${option.replace(/\s+/g, '-').toLowerCase()}`;
+    checkbox.name = 'furnished';
+    checkbox.value = option;
+
+    const label = document.createElement('label');
+    label.htmlFor = checkbox.id;
+    label.textContent = option;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'checkbox-wrapper';
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+
+    if (index % 2 === 0) {
+      leftColumn.appendChild(wrapper);
+    } else {
+      rightColumn.appendChild(wrapper);
+    }
+
+    checkbox.addEventListener('change', updateMap);
+  });
+
+  container.appendChild(leftColumn);
+  container.appendChild(rightColumn);
+}
+
 function updateMap() {
   markers.forEach(marker => map.removeLayer(marker));
   markers = [];
@@ -241,13 +282,16 @@ function updateMap() {
 }
 
 function getFilterValues() {
+  const furnishedOptions = Array.from(document.querySelectorAll('input[name="furnished"]:checked')).map(cb => cb.value);
+  
   return {
     price: document.getElementById('price-range-slider').noUiSlider.get(),
     bedrooms: document.getElementById('bedrooms-slider').noUiSlider.get(),
     fullBaths: document.getElementById('fullbaths-slider').noUiSlider.get(),
     halfBaths: document.getElementById('halfbaths-slider').noUiSlider.get(),
     parking: document.getElementById('parking-slider').noUiSlider.get(),
-    petsAllowed: document.getElementById('pets-allowed').checked
+    petsAllowed: document.getElementById('pets-allowed').checked,
+    furnishedOptions: furnishedOptions
   };
 }
 
@@ -258,8 +302,10 @@ function filterProperty(property, filters) {
          parseInt(property.full_baths) >= filters.fullBaths &&
          parseInt(property.half_baths) >= filters.halfBaths &&
          parseInt(property.parking) >= filters.parking &&
-         (!filters.petsAllowed || property.pets_allowed === 'Yes');
+         (!filters.petsAllowed || property.pets_allowed === 'Yes') &&
+         (filters.furnishedOptions.length === 0 || filters.furnishedOptions.includes(property.furnished));
 }
+
 
 function getUniqueFurnishedOptions() {
   return [...new Set(data.map(item => item.furnished))].filter(Boolean);

@@ -203,6 +203,8 @@ html, body, #map {
   align-items: center;
   justify-content: space-between;
   margin-top: 15px;
+  margin-bottom: 15px;
+
 }
 
 .pets-filter label {
@@ -455,4 +457,56 @@ html, body, #map {
 #attrib a {
   color: white;
   text-decoration: underline;;
+}
+
+.furnished-filter {
+  margin-top: 20px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.checkbox-group label {
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+#sidebar.collapsed .furnished-filter .checkbox-group {
+  display: none;
+}
+
+.furnished-filter .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.furnished-filter .checkbox-column {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.furnished-filter .checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.furnished-filter input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.furnished-filter label {
+  margin-bottom: 0;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#sidebar.collapsed .furnished-filter .checkbox-group {
+  display: none;
 }
