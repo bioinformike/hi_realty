@@ -80,12 +80,12 @@ function initSidebar() {
       
       // Toggle icon
       if (isCollapsed) {
-        toggleIcon.classList.remove('fa-square-caret-left');
-        toggleIcon.classList.add('fa-square-caret-right');
+        toggleIcon.classList.remove('fa-regular fa-square-caret-left');
+        toggleIcon.classList.add('fa-regular fa-square-caret-right');
         sidebarToggle.style.left = '60px';
       } else {
-        toggleIcon.classList.remove('fa-square-caret-right');
-        toggleIcon.classList.add('fa-square-caret-left');
+        toggleIcon.classList.remove('fa-regular fa-square-caret-right');
+        toggleIcon.classList.add('fa-regular fa-square-caret-left');
         sidebarToggle.style.left = '275px';
       }
       
