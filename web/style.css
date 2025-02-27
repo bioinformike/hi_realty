@@ -510,3 +510,173 @@ html, body, #map {
 #sidebar.collapsed .furnished-filter .checkbox-group {
   display: none;
 }
+
+/* Add these styles to style.css */
+.price-inputs-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.price-input {
+    width: 90px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    text-align: center;
+    background: white;
+    color: #333;
+}
+
+.price-input-separator {
+    color: white;
+    font-size: 12px;
+}
+
+.slider-container {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#sidebar.collapsed .price-inputs-container {
+    display: none;
+}
+
+/* Update the existing noUi-horizontal style */
+.noUi-horizontal {
+    height: 8px;
+    width: 100%;
+}
+
+/* Add these styles to style.css */
+.price-inputs-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.price-input {
+    width: 100px;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 2px 8px;
+    height: 24px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.price-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.price-input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.price-input-separator {
+    color: white;
+    font-size: 12px;
+}
+
+.slider-container {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#sidebar.collapsed .price-inputs-container {
+    display: none;
+}
+
+/* Update the existing noUi-horizontal style */
+.noUi-horizontal {
+    height: 8px;
+    width: 100%;
+}
+
+.price-inputs-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.price-input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.price-input-label {
+  color: white;
+  font-size: 14px;
+}
+
+.price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 65px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  height: 24px;
+}
+
+.price-input-prefix {
+  position: absolute;
+  left: 8px;
+  color: white;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.price-input {
+  width: 100%;
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  padding: 2px 8px 2px 16px;
+  /* Increased left padding to accommodate $ */
+  height: 100%;
+}
+
+.price-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.price-input:focus {
+  outline: none;
+}
+
+.price-input-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.price-input:focus+.price-input-wrapper {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+#sidebar.collapsed .price-inputs-container {
+  display: none;
+}
+
+/* Update the existing noUi-horizontal style */
+.noUi-horizontal {
+  height: 8px;
+  width: 100%;
+}

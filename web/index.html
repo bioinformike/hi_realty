@@ -16,16 +16,31 @@
         <h4>Filters</h4>
 
         <div class="filter-item">
-            <div class="filter-header">
-                <span class="filter-label-wrapper">
-                    <i class="fas fa-dollar-sign"></i>
-                    <span class="filter-label">Price Range</span>
-                </span>
-                <span id="price-range-slider-value" class="slider-value"></span>
+          <div class="filter-header">
+            <span class="filter-label-wrapper">
+              <i class="fas fa-dollar-sign"></i>
+              <span class="filter-label">Price Range (Per Month)</span>
+            </span>
+          </div>
+          <div class="price-inputs-container">
+            <div class="price-input-group">
+              <span class="price-input-label">Min:</span>
+              <div class="price-input-wrapper">
+                <span class="price-input-prefix">$</span>
+                <input type="text" class="price-input" id="price-min" placeholder="Min">
+              </div>
             </div>
-            <div class="slider-container">
-                <div id="price-range-slider"></div>
+            <div class="price-input-group">
+              <span class="price-input-label">Max:</span>
+              <div class="price-input-wrapper">
+                <span class="price-input-prefix">$</span>
+                <input type="text" class="price-input" id="price-max" placeholder="Max">
+              </div>
             </div>
+          </div>
+          <div class="slider-container">
+            <div id="price-range-slider"></div>
+          </div>
         </div>
 
         <div class="filter-item">

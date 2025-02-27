@@ -162,9 +162,8 @@ function createSlider(id, min, max, step) {
     console.error(`Slider element with id ${id} not found`);
     return;
   }
-  
+
   const isPrice = id === 'price-range-slider';
-  const pipsConfig = getPipsConfig(id, min, max, step, isPrice);
 
   noUiSlider.create(slider, {
     start: isPrice ? [0, max] : [0],
@@ -178,15 +177,58 @@ function createSlider(id, min, max, step) {
     pips: getPipsConfig(id, min, max, step, isPrice)
   });
 
-  const valueElement = document.getElementById(`${id}-value`);
-  if (valueElement) {
-    slider.noUiSlider.on('update', function(values) {
-      if (isPrice) {
-        valueElement.textContent = `$${parseInt(values[0]).toLocaleString()} - $${parseInt(values[1]).toLocaleString()}`;
-      } else {
-        valueElement.textContent = values[0] > min ? `${values[0]}+` : 'Any';
-      }
+  if (isPrice) {
+    const minInput = document.getElementById('price-min');
+    const maxInput = document.getElementById('price-max');
+
+    // Update inputs when slider changes
+    slider.noUiSlider.on('update', function (values) {
+      minInput.value = parseInt(values[0]).toLocaleString();
+      maxInput.value = parseInt(values[1]).toLocaleString();
     });
+
+    // Helper function to parse input values
+    function parsePrice(value) {
+      return parseInt(value.replace(/[^0-9]/g, '')) || 0;
+    }
+
+    // Update slider when inputs change
+    [minInput, maxInput].forEach((input, index) => {
+      input.addEventListener('change', function () {
+        const values = slider.noUiSlider.get();
+        const newValues = [...values];
+        const parsedValue = parsePrice(this.value);
+
+        // Ensure min doesn't exceed max and max doesn't go below min
+        if (index === 0) {
+          newValues[0] = Math.min(parsedValue, parsePrice(maxInput.value));
+        } else {
+          newValues[1] = Math.max(parsedValue, parsePrice(minInput.value));
+        }
+
+        slider.noUiSlider.set(newValues);
+        updateMap();
+      });
+
+      // Format number while typing
+      input.addEventListener('input', function () {
+        const cursorPos = this.selectionStart;
+        const value = parsePrice(this.value);
+        const formatted = value.toLocaleString();
+        this.value = formatted;
+
+        // Restore cursor position
+        const newCursorPos = cursorPos + (formatted.length - this.value.length);
+        this.setSelectionRange(newCursorPos, newCursorPos);
+      });
+    });
+  } else {
+    const valueElement = document.getElementById(`${id}-value`);
+    if (valueElement) {
+      slider.noUiSlider.on('update', function (values) {
+        valueElement.textContent = values[0] > min ? `${values[0]}+` : 'Any';
+      });
+    }
   }
 
   slider.noUiSlider.on('change', updateMap);
