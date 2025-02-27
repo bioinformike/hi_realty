@@ -6,7 +6,7 @@ This repository contains a set of components to download the data published by t
 ## Scraper (Python)
 The scraper accesses hicentral.com and collects information about the posted properties. It saves all properties to a text-formatted file to be parsed by the code handling generating the map view.
 
-## Map (Unknown language)
+## Map (Leaflet.js)
 This should be a webpage with an interactive map allowing the user to zoom and pan as expected. There should also be a sidebar to enable filtering scraped properties on common dimensions important to users.
 
 # Progress
